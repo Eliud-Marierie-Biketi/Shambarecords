@@ -24,6 +24,9 @@ Expected stage windows used in the assessment:
 - `Growing` up to 45 days
 - `Ready` up to 75 days
 
+Live LINK:
+https://smartseason-field-monitoring-5a552aa5141f.herokuapp.com/
+
 ## Setup
 
 1. Create and activate the virtual environment:
