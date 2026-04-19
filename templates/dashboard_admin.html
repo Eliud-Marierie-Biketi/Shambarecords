@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard | SmartSeason{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Coordinator view</p>
+    <h2 class="page-header__title">Season overview across all fields</h2>
+    <p class="page-header__subtitle">Track crop progress, assign work, and spot fields that need attention before they slip behind schedule.</p>
+  </div>
+  <div class="flex gap-3">
+    <a class="button button--primary" href="{% url 'field-create' %}">Create field</a>
+    <a class="button button--secondary" href="{% url 'field-list' %}">View all fields</a>
+  </div>
+</section>
+
+<section class="grid-4">
+  <article class="card metric-card">
+    <div class="card__body">
+      <span class="text-muted">Total fields</span>
+      <strong class="metric-value">{{ total_fields }}</strong>
+    </div>
+  </article>
+  <article class="card metric-card">
+    <div class="card__body">
+      <span class="text-muted">Active</span>
+      <strong class="metric-value">{{ active_count }}</strong>
+    </div>
+  </article>
+  <article class="card metric-card">
+    <div class="card__body">
+      <span class="text-muted">At Risk</span>
+      <strong class="metric-value">{{ at_risk_count }}</strong>
+    </div>
+  </article>
+  <article class="card metric-card">
+    <div class="card__body">
+      <span class="text-muted">Completed</span>
+      <strong class="metric-value">{{ completed_count }}</strong>
+    </div>
+  </article>
+</section>
+
+<section class="grid-2">
+  <article class="card">
+    <div class="card__header">
+      <div>
+        <p class="eyebrow mb-2">Status breakdown</p>
+        <h3 class="card__title">Field health summary</h3>
+      </div>
+      <div class="flex gap-2">
+        <span class="badge badge--success">Active {{ active_count }}</span>
+        <span class="badge badge--warning">At Risk {{ at_risk_count }}</span>
+        <span class="badge badge--info">Completed {{ completed_count }}</span>
+      </div>
+    </div>
+    <div class="card__body">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Stage</th><th>Count</th></tr>
+          </thead>
+          <tbody>
+            {% for stage, count in stage_counts.items %}
+              <tr><td>{{ stage|title }}</td><td>{{ count }}</td></tr>
+            {% empty %}
+              <tr><td colspan="2">No fields yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__header">
+      <div>
+        <p class="eyebrow mb-2">Assignments</p>
+        <h3 class="card__title">Fields by agent</h3>
+      </div>
+    </div>
+    <div class="card__body">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Agent</th><th>Fields</th></tr>
+          </thead>
+          <tbody>
+            {% for item in assigned_breakdown %}
+              <tr>
+                <td>{% if item.assigned_agent__first_name %}{{ item.assigned_agent__first_name }} {{ item.assigned_agent__last_name }}{% else %}{{ item.assigned_agent__username }}{% endif %}</td>
+                <td><span class="badge badge--neutral">{{ item.total }}</span></td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="2">No assignments yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="card">
+  <div class="card__header">
+    <div>
+      <p class="eyebrow mb-2">Recent activity</p>
+      <h3 class="card__title">Latest updates across the season</h3>
+    </div>
+  </div>
+  <div class="card__body stack-md">
+    {% for update in recent_updates %}
+      <div class="list-row">
+        <div>
+          <strong>{{ update.field.name }}</strong>
+          <p class="text-muted mt-2 mb-0">{{ update.get_stage_display }} by {{ update.updated_by }}</p>
+        </div>
+        <span class="badge badge--neutral">{{ update.created_at|date:"M d, Y H:i" }}</span>
+      </div>
+    {% empty %}
+      <div class="empty-state">
+        <h4 class="mb-2">No updates yet</h4>
+        <p class="text-muted mb-0">Field activity will appear here as agents log progress.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

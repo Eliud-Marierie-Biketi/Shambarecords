@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Update {{ field.name }} | SmartSeason{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Stage update</p>
+    <h2 class="page-header__title">{{ field.name }}</h2>
+    <p class="page-header__subtitle">Capture the latest stage and add observations for the coordinator dashboard.</p>
+  </div>
+</section>
+
+<section class="card form-card">
+  <div class="card__body">
+    <form method="post" class="form-grid">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <label class="field-group">
+          <span class="field-group__label">{{ field.label }}</span>
+          {{ field }}
+          {% if field.help_text %}<small class="field-help">{{ field.help_text }}</small>{% endif %}
+          {% if field.errors %}<small class="field-error">{{ field.errors|striptags }}</small>{% endif %}
+        </label>
+      {% endfor %}
+      <div class="form-actions">
+        <button class="button button--primary" type="submit">Save update</button>
+        <a class="button button--tertiary" href="{% url 'field-detail' field.pk %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

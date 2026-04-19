@@ -1,0 +1,17 @@
+<section class="card {{ card_class|default:'' }}">
+  {% if card_title or card_actions %}
+  <div class="card__header">
+    <div>
+      {% if card_eyebrow %}<p class="eyebrow mb-2">{{ card_eyebrow }}</p>{% endif %}
+      {% if card_title %}<h2 class="card__title">{{ card_title }}</h2>{% endif %}
+      {% if card_subtitle %}<p class="page-header__subtitle mt-2 mb-0">{{ card_subtitle }}</p>{% endif %}
+    </div>
+    {% if card_actions %}
+      <div class="card__actions flex items-center gap-2">{{ card_actions }}</div>
+    {% endif %}
+  </div>
+  {% endif %}
+  <div class="card__body">
+    {{ card_body }}
+  </div>
+</section>

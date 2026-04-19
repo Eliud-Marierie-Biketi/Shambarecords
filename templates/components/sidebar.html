@@ -1,0 +1,31 @@
+{% load static %}
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div>
+      <p class="eyebrow mb-2">SmartSeason</p>
+      <h1>Field Monitoring</h1>
+    </div>
+    <button class="button button--tertiary sidebar-close" type="button" data-sidebar-close aria-label="Close sidebar">✕</button>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Primary">
+    <a class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'admin-dashboard' or request.resolver_match.url_name == 'agent-dashboard' %}is-active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+    <a class="sidebar-link {% if request.resolver_match.url_name == 'field-list' %}is-active{% endif %}" href="{% url 'field-list' %}">Fields</a>
+    {% if user.is_authenticated %}
+      {% if user.role == 'admin' or user.is_staff %}
+        <a class="sidebar-link {% if request.resolver_match.url_name == 'field-create' %}is-active{% endif %}" href="{% url 'field-create' %}">Create field</a>
+      {% endif %}
+    {% endif %}
+  </nav>
+
+  <div class="sidebar-footer stack-sm">
+    <div class="alert alert--info">
+      <strong>Signed in as</strong>
+      <div class="text-muted">{{ user.get_full_name|default:user.username }}</div>
+    </div>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="button button--secondary w-full" type="submit">Logout</button>
+    </form>
+  </div>
+</aside>

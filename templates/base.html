@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SmartSeason{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <script defer src="{% static 'js/ui.js' %}"></script>
+</head>
+<body class="{% if user.is_authenticated %}app-body{% else %}auth-body{% endif %}">
+  {% if user.is_authenticated %}
+    <div class="app-shell">
+      {% include 'components/sidebar.html' %}
+      <div class="main-shell">
+        {% include 'components/navbar.html' %}
+        <div class="content-shell">
+  {% else %}
+    <main class="auth-shell">
+  {% endif %}
+
+          {% if messages %}
+            <div class="stack-sm {% if not user.is_authenticated %}auth-shell__messages{% endif %}">
+              {% for message in messages %}
+                <div class="alert alert--{{ message.tags|default:'info' }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="{% if user.is_authenticated %}page-stack{% else %}auth-shell__content{% endif %}">
+            {% block content %}{% endblock %}
+          </div>
+
+  {% if user.is_authenticated %}
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-backdrop" aria-hidden="true" data-sidebar-close></div>
+  {% else %}
+    </main>
+  {% endif %}
+</body>
+</html>

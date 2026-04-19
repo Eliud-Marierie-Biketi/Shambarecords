@@ -1,0 +1,31 @@
+<header class="topbar">
+  <div class="topbar__group flex items-center gap-3">
+    <button class="button button--tertiary" type="button" data-sidebar-toggle aria-label="Open sidebar">☰</button>
+    <div class="stack-sm">
+      <div class="breadcrumbs" aria-label="Breadcrumb">
+        {% block breadcrumbs %}{% endblock %}
+      </div>
+      <div>
+        <p class="eyebrow mb-0">SmartSeason</p>
+        <strong class="page-kicker">Seasonal field operations</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar__actions flex items-center gap-3">
+    <a class="button button--secondary" href="{% url 'field-list' %}">Fields</a>
+    <details class="dropdown">
+      <summary class="button button--tertiary" data-dropdown-toggle>
+        {{ user.get_short_name|default:user.username }}
+      </summary>
+      <div class="dropdown__menu">
+        <a class="sidebar-link" style="background-color: black;" href="{% url 'dashboard' %}">Dashboard</a>
+        <br>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="sidebar-link sidebar-link--button" type="submit">Logout</button>
+        </form>
+      </div>
+    </details>
+  </div>
+</header>

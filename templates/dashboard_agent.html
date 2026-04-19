@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Agent Dashboard | SmartSeason{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Field agent view</p>
+    <h2 class="page-header__title">Your assigned fields at a glance</h2>
+    <p class="page-header__subtitle">Record stage changes and notes quickly, then focus on fields that are moving slower than expected.</p>
+  </div>
+  <a class="button button--secondary" href="{% url 'field-list' %}">Open assigned fields</a>
+</section>
+
+<section class="grid-4">
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">Assigned fields</span><strong class="metric-value">{{ total_fields }}</strong></div></article>
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">Active</span><strong class="metric-value">{{ active_count }}</strong></div></article>
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">At Risk</span><strong class="metric-value">{{ at_risk_count }}</strong></div></article>
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">Completed</span><strong class="metric-value">{{ completed_count }}</strong></div></article>
+</section>
+
+<section class="grid-2">
+  <article class="card">
+    <div class="card__header">
+      <div>
+        <p class="eyebrow mb-2">Recent updates</p>
+        <h3 class="card__title">Updates you made</h3>
+      </div>
+    </div>
+    <div class="card__body stack-md">
+      {% for update in recent_updates %}
+        <div class="list-row">
+          <div>
+            <strong>{{ update.field.name }}</strong>
+            <p class="text-muted mt-2 mb-0">{{ update.get_stage_display }} - {{ update.notes|default:"No notes" }}</p>
+          </div>
+          <span class="badge badge--neutral">{{ update.created_at|date:"M d, Y" }}</span>
+        </div>
+      {% empty %}
+        <div class="empty-state">
+          <h4 class="mb-2">No updates yet</h4>
+          <p class="text-muted mb-0">Stage changes you submit will show up here.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__header">
+      <div>
+        <p class="eyebrow mb-2">Assigned fields</p>
+        <h3 class="card__title">Field list</h3>
+      </div>
+    </div>
+    <div class="card__body stack-md">
+      {% for field in fields %}
+        <a class="list-row list-row--link" href="{% url 'field-detail' field.pk %}">
+          <div>
+            <strong>{{ field.name }}</strong>
+            <p class="text-muted mt-2 mb-0">{{ field.crop_type }} - {{ field.get_current_stage_display }}</p>
+          </div>
+          <span class="status-pill {{ field.status_badge }}">{{ field.status }}</span>
+        </a>
+      {% empty %}
+        <div class="empty-state">
+          <h4 class="mb-2">No fields assigned yet</h4>
+          <p class="text-muted mb-0">Your coordinator will assign fields here.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+{% endblock %}

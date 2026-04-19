@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | SmartSeason{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Field management</p>
+    <h2 class="page-header__title">{{ title }}</h2>
+    <p class="page-header__subtitle">Keep field metadata current so dashboards and operational tracking remain accurate.</p>
+  </div>
+</section>
+
+<section class="card form-card">
+  <div class="card__body">
+    <form method="post" class="form-grid">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <label class="field-group">
+          <span class="field-group__label">{{ field.label }}</span>
+          {{ field }}
+          {% if field.help_text %}<small class="field-help">{{ field.help_text }}</small>{% endif %}
+          {% if field.errors %}<small class="field-error">{{ field.errors|striptags }}</small>{% endif %}
+        </label>
+      {% endfor %}
+      <div class="form-actions">
+        <button class="button button--primary" type="submit">Save</button>
+        <a class="button button--tertiary" href="{% url 'field-list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

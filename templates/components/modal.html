@@ -1,0 +1,11 @@
+<div class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal__dialog">
+    <div class="card__header">
+      <h2 class="card__title">{{ modal_title|default:'Confirm action' }}</h2>
+      <button type="button" class="button button--tertiary" aria-label="Close modal">✕</button>
+    </div>
+    <div class="card__body">
+      {{ modal_body }}
+    </div>
+  </div>
+</div>

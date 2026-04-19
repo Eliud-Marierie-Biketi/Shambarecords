@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{{ field.name }} | SmartSeason{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Field detail</p>
+    <h2 class="page-header__title">{{ field.name }}</h2>
+    <p class="page-header__subtitle">{{ field.crop_type }} planted on {{ field.planting_date }}</p>
+  </div>
+  <div class="flex gap-3">
+    {% if can_edit %}
+      <a class="button button--secondary" href="{% url 'field-edit' field.pk %}">Edit field</a>
+    {% endif %}
+    {% if can_update_stage %}
+      <a class="button button--primary" href="{% url 'field-update-stage' field.pk %}">Update stage</a>
+    {% endif %}
+  </div>
+</section>
+
+<section class="grid-3">
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">Current stage</span><strong class="metric-value">{{ field.get_current_stage_display }}</strong></div></article>
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">Status</span><strong class="metric-value">{{ field.status }}</strong></div></article>
+  <article class="card metric-card"><div class="card__body"><span class="text-muted">Assigned agent</span><strong class="metric-value">{{ field.assigned_agent|default:"Unassigned" }}</strong></div></article>
+</section>
+
+<section class="card">
+  <div class="card__header">
+    <div>
+      <p class="eyebrow mb-2">Update history</p>
+      <h3 class="card__title">Recent observations</h3>
+    </div>
+  </div>
+  <div class="card__body stack-md">
+    {% for update in updates %}
+      <div class="list-row">
+        <div>
+          <strong>{{ update.get_stage_display }}</strong>
+          <p class="text-muted mt-2 mb-0">{{ update.notes|default:"No notes provided" }}</p>
+        </div>
+        <span class="badge badge--neutral">{{ update.updated_by }} - {{ update.created_at|date:"M d, Y H:i" }}</span>
+      </div>
+    {% empty %}
+      <div class="empty-state">
+        <h4 class="mb-2">No updates recorded yet</h4>
+        <p class="text-muted mb-0">Field agents can use the stage update form to add observations.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

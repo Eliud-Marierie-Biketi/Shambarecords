@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Login | SmartSeason{% endblock %}
+{% block content %}
+<section class="auth-hero">
+  <div class="auth-hero__panel card">
+    <div class="card__body stack-lg">
+      <div>
+        <p class="eyebrow">Welcome back</p>
+        <h1 class="page-header__title">Sign in to SmartSeason</h1>
+        <p class="page-header__subtitle">Use the demo credentials in the README to explore the coordinator and field agent views.</p>
+      </div>
+
+      <div class="alert alert--info">
+        <strong>Demo access</strong>
+        <div class="text-muted mt-2">Admin: admin / admin123</div>
+        <div class="text-muted">Field Agent: agent1 / agent123</div>
+      </div>
+
+      <form method="post" class="form-grid">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="alert alert--error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <label class="field-group">
+          <span class="field-group__label">Username</span>
+          {{ form.username }}
+        </label>
+        <label class="field-group">
+          <span class="field-group__label">Password</span>
+          {{ form.password }}
+        </label>
+        <button class="button button--primary" type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

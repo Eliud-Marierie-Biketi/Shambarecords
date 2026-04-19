@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Fields | SmartSeason{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Field register</p>
+    <h2 class="page-header__title">{% if is_admin %}All fields{% else %}Assigned fields{% endif %}</h2>
+    <p class="page-header__subtitle">A structured view of crop progress, ownership, and operational status.</p>
+  </div>
+  {% if is_admin %}
+    <a class="button button--primary" href="{% url 'field-create' %}">Create field</a>
+  {% endif %}
+</section>
+
+<section class="card">
+  <div class="card__header">
+    <div>
+      <p class="eyebrow mb-2">Records</p>
+      <h3 class="card__title">Field inventory</h3>
+    </div>
+  </div>
+  <div class="card__body">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Crop</th>
+            <th>Stage</th>
+            <th>Status</th>
+            <th>Agent</th>
+            <th class="text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for field in fields %}
+            <tr>
+              <td><strong>{{ field.name }}</strong></td>
+              <td>{{ field.crop_type }}</td>
+              <td>{{ field.get_current_stage_display }}</td>
+              <td><span class="status-pill {{ field.status_badge }}">{{ field.status }}</span></td>
+              <td>{{ field.assigned_agent|default:"Unassigned" }}</td>
+              <td class="text-right"><a class="button button--tertiary" href="{% url 'field-detail' field.pk %}">Open</a></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6">
+              <div class="empty-state">
+                <h4 class="mb-2">No fields available</h4>
+                <p class="text-muted mb-0">Create a field to start tracking crop progress.</p>
+              </div>
+            </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
